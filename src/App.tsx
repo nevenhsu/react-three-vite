@@ -1,25 +1,26 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { Canvas, useFrame, extend } from '@react-three/fiber'
 import { Effects, OrbitControls } from '@react-three/drei'
 import { UnrealBloomPass } from 'three-stdlib'
 import { Model as Model01 } from 'models/Planet_01'
-import type { Mesh } from 'three'
+import type { Group } from 'three'
 
 extend({ UnrealBloomPass })
 
 const Scene = () => {
-  const boxRef = useRef<Mesh>(null)
+  const el = useRef<Group>(null)
   useFrame((state, delta) => {
-    if (boxRef.current) {
-      boxRef.current.rotation.y += 0.02
+    if (el.current) {
+      el.current.rotation.y += delta / 2
+      el.current.rotation.z += delta / 8
     }
   })
 
   return (
-    <>
+    <group ref={el}>
       <Model01 />
       <ambientLight intensity={1} />
-    </>
+    </group>
   )
 }
 
