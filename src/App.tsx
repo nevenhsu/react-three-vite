@@ -1,11 +1,9 @@
 import { useRef } from 'react'
-import { Canvas, useFrame, extend } from '@react-three/fiber'
-import { Effects, OrbitControls } from '@react-three/drei'
-import { UnrealBloomPass } from 'three-stdlib'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls, Stats } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { Model as Model01 } from 'models/Planet_01'
 import type { Group } from 'three'
-
-extend({ UnrealBloomPass })
 
 const Scene = () => {
   const el = useRef<Group>(null)
@@ -19,7 +17,7 @@ const Scene = () => {
   return (
     <group ref={el}>
       <Model01 />
-      <ambientLight intensity={1} />
+      <ambientLight intensity={3.5} />
     </group>
   )
 }
@@ -27,11 +25,12 @@ const Scene = () => {
 const App = () => {
   return (
     <Canvas camera={{ fov: 70, position: [0, 0, 30] }}>
+      <Stats />
       <OrbitControls />
       <Scene />
-      <Effects>
-        <unrealBloomPass threshold={0.75} strength={1} radius={0.5} />
-      </Effects>
+      <EffectComposer>
+        <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} />
+      </EffectComposer>
     </Canvas>
   )
 }
